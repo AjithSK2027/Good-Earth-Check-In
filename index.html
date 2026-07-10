@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Pre-Arrival Guest Registration</title>
   
   <!-- Premium Typography: Inter -->
@@ -27,14 +27,21 @@
       --radius-ui: 12px;
     }
 
-    * { box-sizing: border-box; transition: all 0.2s ease-in-out; }
+    * { 
+      box-sizing: border-box; 
+      transition: all 0.2s ease-in-out; 
+      -webkit-tap-highlight-color: transparent;
+    }
     
-    body {
-      font-family: 'Inter', sans-serif;
+    html, body {
+      width: 100%;
+      max-width: 100%;
+      overflow-x: hidden; /* Eliminates side-to-side web app wobble */
       background-color: var(--bg-canvas);
       color: var(--text-main);
       margin: 0;
       padding: 0;
+      font-family: 'Inter', sans-serif;
       -webkit-font-smoothing: antialiased;
     }
 
@@ -65,9 +72,10 @@
     }
 
     .container {
+      width: 100%;
       max-width: 520px;
-      margin: 40px auto 80px auto;
-      padding: 0 24px;
+      margin: 24px auto 80px auto;
+      padding: 0 16px;
     }
 
     /* Section Typography */
@@ -83,7 +91,6 @@
       gap: 10px;
     }
 
-    /* Material Icon baseline size adjustment for titles */
     .section-title i {
       font-size: 18px;
       line-height: 1;
@@ -92,14 +99,14 @@
     /* Clean Card Architecture with Generous Room */
     .form-panel {
       background: var(--bg-card);
-      padding: 40px;
+      padding: 32px 24px; /* Optimized edge margins for mobile screen space */
       border-radius: var(--radius-ui);
       border: 1px solid var(--border-fine);
-      margin-bottom: 32px;
+      margin-bottom: 24px;
     }
 
     .form-group {
-      margin-bottom: 28px; /* High editorial breathing room between rows */
+      margin-bottom: 28px; /* High editorial breathing room between fields */
     }
 
     .form-group:last-child {
@@ -130,7 +137,7 @@
       top: 50%;
       transform: translateY(-50%); 
       color: #94a3b8;
-      font-size: 20px; /* Optimal sizing for MDI font icons */
+      font-size: 20px;
       line-height: 1;
       pointer-events: none;
       z-index: 2;
@@ -139,15 +146,18 @@
     /* Polished Text & Field Elements */
     input, select {
       width: 100%;
-      padding: 14px 16px 14px 48px; /* 48px padding creates flawless structural room for icons */
+      max-width: 100%;
+      padding: 14px 16px 14px 48px; /* Safe padding padding block room for icons */
       border: 1px solid var(--border-fine);
       border-radius: var(--radius-ui);
-      font-size: 15px;
+      font-size: 16px; /* 16px scale prevents unprompted iOS safari zooming on click */
       font-family: 'Inter', sans-serif;
       color: var(--text-main);
       background-color: #fbfcfd;
       position: relative;
       display: block;
+      -webkit-appearance: none;
+      appearance: none;
     }
 
     input:focus, select:focus {
@@ -161,6 +171,10 @@
       color: #cbd5e1;
       font-size: 14px;
       font-weight: 400;
+    }
+
+    input[type="date"] {
+      min-height: 48px;
     }
 
     .guest-card {
@@ -281,7 +295,7 @@
   </div>
 
   <script>
-    // Dynamically assigns text layouts matching path parameters natively on load
+    // Handles specific brand title customization based on url path automatically
     window.onload = function() {
       const path = window.location.pathname.toLowerCase();
       const titleEl = document.getElementById('brandTitle');
@@ -315,18 +329,18 @@
           </div>
           
           <div class="form-group">
-            <label>Mobile Number (Optional)</label>
+            <label>Mobile Number</label>
             <div class="input-field-container">
               <i class="mdi mdi-cellphone"></i>
-              <input type="tel" class="guest-phone" placeholder="Contact number">
+              <input type="tel" class="guest-phone" required placeholder="Contact number">
             </div>
           </div>
           
           <div class="form-group">
-            <label>Email Address (Optional)</label>
+            <label>Email Address</label>
             <div class="input-field-container">
               <i class="mdi mdi-email-outline"></i>
-              <input type="email" class="guest-email" placeholder="email@address.com">
+              <input type="email" class="guest-email" required placeholder="email@address.com">
             </div>
           </div>
           
@@ -334,7 +348,7 @@
             <label>Aadhaar Number</label>
             <div class="input-field-container">
               <i class="mdi mdi-shield-check-outline"></i>
-              <input type="text" class="guest-id" placeholder="12-digit identification number">
+              <input type="text" class="guest-id" required placeholder="12-digit identification number">
             </div>
           </div>
         `;
@@ -349,8 +363,17 @@
       const emails = Array.from(document.querySelectorAll('.guest-email')).map(el => el.value);
       const ids = Array.from(document.querySelectorAll('.guest-id')).map(el => el.value);
 
-      if (!phoneInput || names.some(name => name.trim() === "") || document.getElementById('leadName').value.trim() === "" || !document.getElementById('checkInDate').value) {
-        alert("Please fill out all mandatory fields.");
+      // Strict validation constraint verifying every dynamic input is completely filled
+      if (
+        !phoneInput || 
+        document.getElementById('leadName').value.trim() === "" || 
+        !document.getElementById('checkInDate').value ||
+        names.some(name => name.trim() === "") ||
+        phones.some(phone => phone.trim() === "") ||
+        emails.some(email => email.trim() === "") ||
+        ids.some(id => id.trim() === "")
+      ) {
+        alert("Please completely fill out all required fields before confirming your registration.");
         return;
       }
 
@@ -371,7 +394,7 @@
         }))
       };
 
-      // ⚠️ ASSIGN DIRECT PROPERTY SPECIFIC WEB EXEC ENDPOINT LINK HERE
+      // ⚠️ ASSIGN DIRECT PROPERTY SPECIFIC GOOGLE SCRIPT EXEC ENDPOINT LINK HERE
       const googleWebAppUrl = 'https://script.google.com/macros/s/AKfycby4BRBGkXKbOh7wIoz6Hu0S4devMvUSBOpMJhhwZps4DzIDqU7Qa7Zwci8v3JDt7VT3/exec';
 
       fetch(googleWebAppUrl, {
