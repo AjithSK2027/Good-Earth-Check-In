@@ -1,58 +1,297 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pre-Arrival Guest Registration</title>
+  
+  <!-- Premium Typography: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Material Design Icons CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css">
+  
   <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; padding: 15px; background: #f4f6f9; color: #333; margin: 0; }
-    .header-panel { padding: 20px; text-align: center; color: white; border-radius: 0 0 12px 12px; margin: -15px -15px 20px -15px; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.1); background-color: #2c3e50; }
-    .card { background: white; padding: 20px; margin-bottom: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-    h2 { margin: 0 0 5px 0; font-size: 22px; }
-    h3 { margin: 0 0 15px 0; font-size: 16px; border-bottom: 1px solid #eee; padding-bottom: 8px; }
-    label { font-size: 13px; font-weight: 600; color: #555; display: block; margin-top: 10px; }
-    input, select { width: 100%; padding: 12px; margin: 6px 0 12px 0; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 15px; }
-    button { color: white; padding: 14px; border: none; width: 100%; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 10px; background-color: #2c3e50; }
-    .guest-block { border-left: 4px solid #2c3e50; padding-left: 15px; }
+    :root {
+      /* --- BRAND CONFIGURATION --- */
+      /* For Camp Alpha use: #1b4d3e (Forest) | For Good Earth Homestay use: #4A3B32 (Espresso) */
+      --brand-primary: #4A3B32; 
+      
+      --text-main: #0f172a;       /* Crisp Charcoal Black */
+      --text-muted: #64748b;      /* Muted Architectural Grey */
+      --bg-canvas: #f8fafc;       /* Clean Off-white Surface */
+      --bg-card: #ffffff;
+      --border-fine: #e2e8f0;     /* Ultra-thin Minimalist Lines */
+      --radius-ui: 12px;
+    }
+
+    * { box-sizing: border-box; transition: all 0.2s ease-in-out; }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-canvas);
+      color: var(--text-main);
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Spacious, Editorial Header Layout */
+    .brand-hero {
+      text-align: center;
+      padding: 64px 24px 48px 24px;
+      background-color: var(--bg-card);
+      border-bottom: 1px solid var(--border-fine);
+    }
+
+    .brand-hero h1 {
+      font-size: 26px;
+      font-weight: 300;
+      letter-spacing: 4px;
+      color: var(--brand-primary);
+      margin: 0;
+      text-transform: uppercase;
+    }
+
+    .brand-hero p {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 1.5px;
+      color: var(--text-muted);
+      margin: 12px 0 0 0;
+      text-transform: uppercase;
+    }
+
+    .container {
+      max-width: 520px;
+      margin: 40px auto 80px auto;
+      padding: 0 24px;
+    }
+
+    /* Section Typography */
+    .section-title {
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--brand-primary);
+      margin: 0 0 28px 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Material Icon baseline size adjustment for titles */
+    .section-title i {
+      font-size: 18px;
+      line-height: 1;
+    }
+
+    /* Clean Card Architecture with Generous Room */
+    .form-panel {
+      background: var(--bg-card);
+      padding: 40px;
+      border-radius: var(--radius-ui);
+      border: 1px solid var(--border-fine);
+      margin-bottom: 32px;
+    }
+
+    .form-group {
+      margin-bottom: 28px; /* High editorial breathing room between rows */
+    }
+
+    .form-group:last-child {
+      margin-bottom: 0;
+    }
+
+    label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      display: block;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Input Wrapper Layout */
+    .input-field-container {
+      position: relative;
+      width: 100%;
+      display: block; 
+    }
+
+    /* Pulls Material Icon INSIDE field boundaries with absolute vertical centering */
+    .input-field-container i {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%); 
+      color: #94a3b8;
+      font-size: 20px; /* Optimal sizing for MDI font icons */
+      line-height: 1;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* Polished Text & Field Elements */
+    input, select {
+      width: 100%;
+      padding: 14px 16px 14px 48px; /* 48px padding creates flawless structural room for icons */
+      border: 1px solid var(--border-fine);
+      border-radius: var(--radius-ui);
+      font-size: 15px;
+      font-family: 'Inter', sans-serif;
+      color: var(--text-main);
+      background-color: #fbfcfd;
+      position: relative;
+      display: block;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--brand-primary);
+      background-color: #ffffff;
+      box-shadow: 0 0 0 1px var(--brand-primary);
+    }
+
+    input::placeholder {
+      color: #cbd5e1;
+      font-size: 14px;
+      font-weight: 400;
+    }
+
+    .guest-card {
+      border-top: 2px solid var(--border-fine);
+      padding-top: 36px;
+      margin-top: 36px;
+    }
+
+    /* Statement Footer Button Configuration */
+    .action-container {
+      margin-top: 40px;
+    }
+
+    button {
+      background-color: var(--brand-primary);
+      color: #ffffff;
+      padding: 18px;
+      border: none;
+      width: 100%;
+      border-radius: var(--radius-ui);
+      font-weight: 600;
+      font-size: 14px;
+      letter-spacing: 1.5px;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      text-transform: uppercase;
+    }
+
+    button i {
+      font-size: 18px;
+      line-height: 1;
+    }
+
+    button:hover {
+      opacity: 0.95;
+    }
+
+    button:disabled {
+      background-color: #cbd5e1;
+      color: #94a3b8;
+      cursor: not-allowed;
+    }
   </style>
 </head>
 <body>
 
-  <div class="header-panel">
-    <h2>Good Earth Homestay Check-In</h2>
-    <div>Pre-Arrival Registration</div>
+  <div class="brand-hero">
+    <h1 id="brandTitle">GOOD EARTH HOMESTAY</h1>
+    <p>Pre-Arrival Express Check-In</p>
   </div>
   
-  <form id="checkInForm">
-    <div class="card">
-      <label>Lead Booker Phone Number (Used to group your batch)</label>
-      <input type="tel" id="bookingIdInput" required placeholder="Enter 10-digit mobile number">
+  <div class="container">
+    <form id="checkInForm">
       
-      <label>Lead Booker Full Name</label>
-      <input type="text" id="leadName" required placeholder="As per government ID">
-      
-      <label>Check-in Date</label>
-      <input type="date" id="checkInDate" required>
-      
-      <label>Total Number of Guests in Your Batch</label>
-      <select id="totalGuests" onchange="generateGuestFields()">
-        <option value="1">1 Person</option>
-        <option value="2">2 People</option>
-        <option value="3">3 People</option>
-        <option value="4">4 People</option>
-        <option value="5">5 People</option>
-        <option value="6">6 People</option>
-        <option value="7">7 People</option>
-        <option value="8">8 People</option>
-        <option value="9">9+ People</option>
-      </select>
-    </div>
+      <!-- Core Booking Verification Frame -->
+      <div class="form-panel">
+        <h2 class="section-title"><i class="mdi mdi-compass-outline"></i> Booking Verification</h2>
+        
+        <div class="form-group">
+          <label>Lead Booker Phone Number</label>
+          <div class="input-field-container">
+            <i class="mdi mdi-cellphone"></i>
+            <input type="tel" id="bookingIdInput" required placeholder="Enter 10-digit mobile number">
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Lead Booker Full Name</label>
+          <div class="input-field-container">
+            <i class="mdi mdi-account-outline"></i>
+            <input type="text" id="leadName" required placeholder="As shown on official ID">
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Arrival Date</label>
+          <div class="input-field-container">
+            <i class="mdi mdi-calendar-blank-outline"></i>
+            <input type="date" id="checkInDate" required>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Total Entourage / Batch Size</label>
+          <div class="input-field-container">
+            <i class="mdi mdi-account-group-outline"></i>
+            <select id="totalGuests" onchange="generateGuestFields()">
+              <option value="1">1 Guest</option>
+              <option value="2">2 Guests</option>
+              <option value="3">3 Guests</option>
+              <option value="4">4 Guests</option>
+              <option value="5">5 Guests</option>
+              <option value="6">6 Guests</option>
+              <option value="7">7 Guests</option>
+              <option value="8">8 Guests</option>
+              <option value="9">9+ Guests</option>
+            </select>
+          </div>
+        </div>
+      </div>
 
-    <div id="dynamicGuestsContainer"></div>
+      <!-- Live Script Appended Profiles Drop Target -->
+      <div id="dynamicGuestsContainer"></div>
 
-    <button type="button" id="submitBtn" onclick="submitData()">Confirm Group Registration</button>
-  </form>
+      <!-- Action Footer -->
+      <div class="action-container">
+        <button type="button" id="submitBtn" onclick="submitData()">
+          <span>Verify & Register Batch</span>
+          <i class="mdi mdi-chevron-right"></i>
+        </button>
+      </div>
+
+    </form>
+  </div>
 
   <script>
+    // Dynamically assigns text layouts matching path parameters natively on load
     window.onload = function() {
+      const path = window.location.pathname.toLowerCase();
+      const titleEl = document.getElementById('brandTitle');
+      
+      if (path.includes('alpha')) {
+        titleEl.innerText = "CAMP ALPHA";
+      } else if (path.includes('earth')) {
+        titleEl.innerText = "GOOD EARTH HOMESTAY";
+      }
+      
       generateGuestFields();
     };
 
@@ -63,20 +302,41 @@
 
       for (let i = 1; i <= count; i++) {
         const guestDiv = document.createElement('div');
-        guestDiv.className = 'card guest-block';
+        guestDiv.className = 'form-panel' + (i > 1 ? ' guest-card' : '');
         guestDiv.innerHTML = `
-          <h3>👤 Guest #${i} Profile</h3>
-          <label>Full Name</label>
-          <input type="text" class="guest-name" required placeholder="Enter full name">
+          <h2 class="section-title"><i class="mdi mdi-account-check-outline"></i> Guest #${i} Profile</h2>
           
-          <label>Phone Number (Optional)</label>
-          <input type="tel" class="guest-phone" placeholder="Mobile number">
+          <div class="form-group">
+            <label>Full Name</label>
+            <div class="input-field-container">
+              <i class="mdi mdi-account-outline"></i>
+              <input type="text" class="guest-name" required placeholder="First and last name">
+            </div>
+          </div>
           
-          <label>Email Address (Optional)</label>
-          <input type="email" class="guest-email" placeholder="name@example.com">
+          <div class="form-group">
+            <label>Mobile Number (Optional)</label>
+            <div class="input-field-container">
+              <i class="mdi mdi-cellphone"></i>
+              <input type="tel" class="guest-phone" placeholder="Contact number">
+            </div>
+          </div>
           
-          <label>Aadhaar Number</label>
-          <input type="text" class="guest-id" placeholder="12-digit Aadhaar number">
+          <div class="form-group">
+            <label>Email Address (Optional)</label>
+            <div class="input-field-container">
+              <i class="mdi mdi-email-outline"></i>
+              <input type="email" class="guest-email" placeholder="email@address.com">
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label>Aadhaar Number</label>
+            <div class="input-field-container">
+              <i class="mdi mdi-shield-check-outline"></i>
+              <input type="text" class="guest-id" placeholder="12-digit identification number">
+            </div>
+          </div>
         `;
         container.appendChild(guestDiv);
       }
@@ -90,13 +350,13 @@
       const ids = Array.from(document.querySelectorAll('.guest-id')).map(el => el.value);
 
       if (!phoneInput || names.some(name => name.trim() === "") || document.getElementById('leadName').value.trim() === "" || !document.getElementById('checkInDate').value) {
-        alert("Please complete all required fields.");
+        alert("Please fill out all mandatory fields.");
         return;
       }
 
       const btn = document.getElementById('submitBtn');
       btn.disabled = true;
-      btn.innerText = "Processing secure registration...";
+      btn.innerHTML = `<span>Securing digital registry...</span>`;
 
       const payload = {
         bookingId: phoneInput,
@@ -111,28 +371,28 @@
         }))
       };
 
-      // ⚠️ REPLACE THIS URL WITH YOUR ACTUAL DEPLOYED GOOGLE APPS SCRIPT WEB APP URL
+      // ⚠️ ASSIGN DIRECT PROPERTY SPECIFIC WEB EXEC ENDPOINT LINK HERE
       const googleWebAppUrl = 'https://script.google.com/macros/s/AKfycby4BRBGkXKbOh7wIoz6Hu0S4devMvUSBOpMJhhwZps4DzIDqU7Qa7Zwci8v3JDt7VT3/exec';
 
       fetch(googleWebAppUrl, {
         method: 'POST',
-        mode: 'no-cors', // Bypasses CORS cross-domain security blocks natively
+        mode: 'no-cors',
         cache: 'no-cache',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       })
       .then(() => {
-        alert('Perfect! Your group details are securely registered.');
+        alert('Verification complete. Welcome to your stay.');
         document.getElementById('checkInForm').reset();
         generateGuestFields();
         btn.disabled = false;
-        btn.innerText = "Confirm Group Registration";
+        btn.innerHTML = `<span>Verify & Register Batch</span><i class="mdi mdi-chevron-right"></i>`;
       })
       .catch(err => {
-        alert('Submission failed. Please check network connection and try again.');
+        alert('Registry sync error. Please verify network or alert management.');
         console.error(err);
         btn.disabled = false;
-        btn.innerText = "Confirm Group Registration";
+        btn.innerHTML = `<span>Verify & Register Batch</span><i class="mdi mdi-chevron-right"></i>`;
       });
     }
   </script>
